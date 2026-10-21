@@ -3,20 +3,230 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Programs Redesign | Phi Institute of Design</title>
-<style>
-  :root { --fg:#111; --muted:#777; --bg:#fff; }
-  @media (prefers-color-scheme: dark) { :root { --fg:#eee; --muted:#888; --bg:#111; } }
-  html,body { margin:0; background:var(--bg); color:var(--fg); font-family: -apple-system, "Pretendard", "Apple SD Gothic Neo", sans-serif; }
-  main { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:0 24px; max-width:720px; margin:0 auto; }
-  h1 { font-size:40px; letter-spacing:-0.02em; margin:0 0 12px; }
-  p { color:var(--muted); line-height:1.6; margin:0; }
-</style>
+<title>Programs | Phi Institute of Design (Redesign)</title>
+<meta name="description" content="Phi의 1년제 프로그램 — 리디자인 초안">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="wordmark" href="https://www.phi.design/">Phi Institute of Design</a>
+    <nav class="site-nav" aria-label="사이트">
+      <a href="https://www.phi.design/about">About</a>
+      <a href="https://www.phi.design/programs" aria-current="page">Programs</a>
+      <a href="https://www.phi.design/experts">Experts</a>
+      <a href="https://www.phi.design/admissions">Admissions</a>
+    </nav>
+    <a class="btn btn--primary btn--sm" href="https://www.phi.design/updates">2기 오픈 알림 신청</a>
+  </div>
+</header>
+
 <main>
-  <h1>Programs — Redesign</h1>
-  <p>phi.design/programs 페이지 리디자인 작업 중입니다.</p>
+
+<!-- 1. Hero -->
+<section class="hero" id="top">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <h1 class="hero__title">Programs</h1>
+      <p class="hero__sub">Phi의 1년제 프로그램을 소개합니다.</p>
+      <p class="hero__lead">도구는 빠르게 바뀝니다. Phi는 도구보다 사고방식에 집중합니다. 탁월한 인재는 어떤 조건에도 적용할 수 있는 자신만의 성공 방정식을 갖고 있고, 이 인재를 벡터형 인재라 부릅니다. 1년제 프로그램은 벡터형 인재가 가진 역량과 태도를 학습하고, 나아가 주체적으로 자신만의 역량과 태도를 만들어갑니다.</p>
+      <p class="hero__body">이 과정은 연령, 직군, 경력을 제한하지 않습니다. 디자인을 더 깊이 이해하고 싶은 사람, 방향을 다시 잡고 싶은 사람, 스스로 만들고 출시할 수 있는 기반을 갖추고 싶은 사람. 어느 지점에서 출발하든, 디자인에 진지한 태도를 가진 분이라면 지원할 수 있습니다.</p>
+    </div>
+    <figure class="hero__art relief-tile" data-coord>
+      <img src="assets/img/hero.jpg" alt="황금비 나선과 잎 문양이 새겨진 대리석 부조" width="1000" height="800">
+      <svg class="construct" data-construct="hero" aria-hidden="true"></svg>
+      <div class="crosshair" aria-hidden="true"><span class="crosshair__x"></span><span class="crosshair__y"></span><span class="crosshair__label"></span></div>
+    </figure>
+  </div>
+  <div class="wrap">
+    <dl class="facts">
+      <div><dt>과정 기간</dt><dd>1년 (2학기)</dd></div>
+      <div><dt>총 시수</dt><dd>약 1,000시간+</dd></div>
+      <div><dt>수업 방식</dt><dd>월-금, 전일제 오프라인</dd></div>
+      <div><dt>학습자 규모</dt><dd>60명 <span class="facts__note">(30명씩, 2개 클래스로 운영)</span></dd></div>
+      <div><dt>개강</dt><dd>2027년 2월 15일</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- 로컬 내비게이션 -->
+<nav class="localnav" aria-label="페이지 목차">
+  <div class="wrap localnav__inner">
+    <a href="#competency" data-nav>역량</a>
+    <a href="#courses" data-nav>주요 수업</a>
+    <a href="#learning" data-nav>태도와 배우는 방식</a>
+    <a href="#year" data-nav>1년의 흐름</a>
+    <a href="#after" data-nav>졸업 이후와 지원</a>
+  </div>
+  <div class="localnav__progress" aria-hidden="true"><span></span></div>
+</nav>
+
+<!-- 2. 역량 -->
+<section class="section" id="competency" data-section>
+  <div class="wrap">
+    <header class="section__head">
+      <h2 class="section__title">역량 <span class="en">Competency</span></h2>
+      <p class="section__desc">어떤 환경에서도 스스로 답을 찾을 수 있는 사고방식을 만들기 위해, Phi는 아래 역량과 태도를 중요시합니다.</p>
+    </header>
+    <ul class="competency">
+      <li class="competency__item">
+        <div class="relief-tile competency__tile"><img src="assets/img/c-aesthetic.jpg" alt="" loading="lazy"><svg class="construct" aria-hidden="true"></svg></div>
+        <h3 class="item-name">심미안</h3><p class="item-en">Aesthetic Sense</p>
+        <p class="item-desc">디자이너에게 가장 중요한 역량을 고르라면 아름다움을 인식하는 능력 아닐까? 대상을 보았을 때 구체적으로 부분을 인식하고, 미추를 판단하며, 그 미추의 정도를 가늠할 수 있는 예리한 감각을 훈련한다.</p>
+      </li>
+      <li class="competency__item">
+        <div class="relief-tile competency__tile"><img src="assets/img/c-articulation.jpg" alt="" loading="lazy"><svg class="construct" aria-hidden="true"></svg></div>
+        <h3 class="item-name">언어화</h3><p class="item-en">Articulation</p>
+        <p class="item-desc">언어는 곧 사고의 천장이다. 내가 다룰 수 있는 어휘의 질과 양이 나의 사고방식의 높이를 결정한다. 타인에게 내 생각을 전달하는 것은 물론, 스스로를 설득할 수 있는 언어 체계를 갖춘다.</p>
+      </li>
+      <li class="competency__item">
+        <div class="relief-tile competency__tile"><img src="assets/img/c-structure.jpg" alt="" loading="lazy"><svg class="construct" aria-hidden="true"></svg></div>
+        <h3 class="item-name">구조화</h3><p class="item-en">Structural Thinking</p>
+        <p class="item-desc">나무를 보는 것만큼 숲을 보는 일도 중요하다. 구체와 추상을 오가며 현재 다루고 있는 문제가 전체 그림에서 어느 위치성을 지니는지 이해하고, 파편화된 분야들을 하나로 엮어내는 구조적 사고를 훈련한다.</p>
+      </li>
+      <li class="competency__item">
+        <div class="relief-tile competency__tile"><img src="assets/img/c-problem.jpg" alt="" loading="lazy"><svg class="construct" aria-hidden="true"></svg></div>
+        <h3 class="item-name">문제 정의</h3><p class="item-en">Problem Definition</p>
+        <p class="item-desc">많은 디자인이 실패하는 이유는 틀린 문제를 풀었기 때문이다. 증상을 문제로 오독하지 않고, 본질이 무엇인지 파악함으로써 정확한 문제 정의를 추구한다.</p>
+      </li>
+      <li class="competency__item">
+        <div class="relief-tile competency__tile"><img src="assets/img/c-reframing.jpg" alt="" loading="lazy"><svg class="construct" aria-hidden="true"></svg></div>
+        <h3 class="item-name">관점 전환</h3><p class="item-en">Reframing</p>
+        <p class="item-desc">혁신적인 해결책은 같은 문제를 다른 관점으로 바라보았을 때 나온다. 특정 문제를 그 분야의 문법으로만 정의하는 것이 아니라, 다른 분야의 레퍼런스도 내 문제에 적용할 수 있는 관점을 지니기 위해 유연한 관점 전환을 훈련한다.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3. 주요 수업 -->
+<section class="section" id="courses" data-section>
+  <div class="wrap">
+    <header class="section__head">
+      <h2 class="section__title">주요 수업들</h2>
+      <p class="section__desc">상기된 <a href="#competency">역량과 태도</a>를 중심으로 수업들이 설계되었습니다. 이를 토대로 디지털 프로덕트 디자인과 브랜딩 분야에서 자신의 가능성을 펼칠 수 있도록 합니다.</p>
+      <p class="section__note">본 주요 수업들은 1학기에 진행되는 수업들이며, 2학기는 1학기의 성취에 따라 학습 효과를 보완, 증폭할 수 있는 방향으로 준비됩니다.</p>
+    </header>
+    <ul class="courses" id="courseList"></ul>
+  </div>
+</section>
+
+<!-- 4. 태도 + 배우는 방식 -->
+<section class="section" id="learning" data-section>
+  <div class="wrap">
+    <header class="section__head">
+      <h2 class="section__title">태도 <span class="en">Phi OS</span></h2>
+    </header>
+    <ul class="attitude">
+      <li class="attitude__item"><div class="glyph-tile"><svg viewBox="0 0 120 120" class="glyph" data-glyph="active"></svg></div>
+        <h3 class="item-name">능동적으로 학습하기</h3><p class="item-en">Active Learning</p>
+        <p class="item-desc">Phi의 전체 교육 과정은 학습자의 능동성을 중요시한다. 교사는 가르치고, 학생은 배우는 구조가 아닌 학습자 스스로 동기를 부여하고 배움을 설계하는 방식을 전제로 한다.</p></li>
+      <li class="attitude__item"><div class="glyph-tile"><svg viewBox="0 0 120 120" class="glyph" data-glyph="unknown"></svg></div>
+        <h3 class="item-name">무지를 발굴하기</h3><p class="item-en">Discovering Unknowns</p>
+        <p class="item-desc">Phi에서는 질문하는 것, 못하는 상태에서 내 결과물을 내놓는 것을 권장한다. 자신의 현재 상태를 꺼내놓음으로써 자신이 정확하게 무엇을 모르는지 발견할 수 있는 기회가 되기 때문이다.</p></li>
+      <li class="attitude__item"><div class="glyph-tile"><svg viewBox="0 0 120 120" class="glyph" data-glyph="unpack"></svg></div>
+        <h3 class="item-name">압축된 사고 분석하기</h3><p class="item-en">Unpacking the Compression</p>
+        <p class="item-desc">사고 과정을 관찰하는 훈련이 되어있다면, 교실은 물론 교실 밖 일상에서도 전문성을 추출해낼 수 있다. Phi에서는 지식을 전달 받기를 기다리지 않고, 먼저 추출하는 태도와 기술을 연습한다.</p></li>
+      <li class="attitude__item"><div class="glyph-tile"><svg viewBox="0 0 120 120" class="glyph" data-glyph="sensor"></svg></div>
+        <h3 class="item-name">불만족에 민감해지기</h3><p class="item-en">Dissatisfaction Sensor</p>
+        <p class="item-desc">문제 정의의 출발은 문제 감지에서 시작된다. 완성도를 타협하지 않는 이들은 쉽게 만족하지 않고 불만족을 민감하게 알아차린다. 좋은 것을 만들기 위해서는 좋지 않음을 느낄 수 있어야 한다.</p></li>
+      <li class="attitude__item"><div class="glyph-tile"><svg viewBox="0 0 120 120" class="glyph" data-glyph="share"></svg></div>
+        <h3 class="item-name">공유하며 배우기</h3><p class="item-en">Learning by Sharing</p>
+        <p class="item-desc">가장 잘 배우는 방법은 남에게 가르쳐 보는 것이다. 이미 충분히 이해했다고 생각하는 것도 타인에게 설명해보고, 설득해보면 공백이 있다는 것을 깨닫게 된다. 이 메커니즘을 이해하고, 자신의 지식을 적극적으로 공유할 수 있어야 한다.</p></li>
+    </ul>
+
+    <div class="sub">
+      <header class="sub__head">
+        <h3 class="sub__title">수업을 관통하는 접근</h3>
+        <p class="sub__kicker">핵심 수업 장치</p>
+        <p class="section__desc">Phi의 교육은 인지적 도제(Cognitive Apprenticeship)를 토대로 설계되었습니다. 전문가의 사고 과정을 학습자가 능동적으로 관찰할 수 있도록 다양한 장치가 준비되어있습니다.</p>
+      </header>
+      <div class="devices" id="devices"></div>
+    </div>
+  </div>
+
+  <div class="program" id="program">
+    <div class="program__stage">
+      <div class="wrap">
+        <header class="sub__head">
+          <h3 class="sub__title">프로그램 구조</h3>
+          <p class="section__desc">1년제 프로그램은 아래 요소들로 구성되어있습니다.</p>
+        </header>
+        <ol class="program__grid" id="programGrid"></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 1년의 흐름 -->
+<section class="section" id="year" data-section>
+  <div class="wrap">
+    <header class="section__head">
+      <h2 class="section__title">1년의 흐름 <span class="en">연간 구조</span></h2>
+    </header>
+    <div class="timeline" id="timeline">
+      <div class="timeline__axis" id="timelineAxis" aria-hidden="true"></div>
+      <div class="timeline__bars" id="timelineBars"></div>
+    </div>
+    <ol class="periods" id="periods"></ol>
+
+    <div class="weekly">
+      <div class="weekly__summary">
+        <div>
+          <h3 class="sub__title">주간 시간표</h3>
+          <p class="section__desc">매주 월-금 수업이 진행됩니다. 화, 수, 목은 오전-오후 풀타임으로 진행되며 월, 금은 학기 수업 스케줄에 따라 유동적으로 진행됩니다.</p>
+        </div>
+        <button class="btn btn--outline" id="weeklyToggle" aria-expanded="false" aria-controls="weeklyGrid">시간표 보기</button>
+      </div>
+      <div class="weekly__panel" id="weeklyGrid" hidden></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 졸업 이후와 지원 -->
+<section class="section" id="after" data-section>
+  <div class="wrap">
+    <header class="section__head">
+      <h2 class="section__title">채용 연계</h2>
+      <p class="section__desc">Phi의 1년제 프로그램 졸업자들은 토스의 별도 채용 전형에 지원할 수 있습니다.</p>
+    </header>
+    <div class="hire">
+      <div class="hire__item">
+        <h3 class="hire__name">토스 별도 채용 전형</h3>
+        <p class="item-desc">2028년 2월, Phi 1년제 프로그램 졸업자를 위한 토스의 별도 채용 전형이 마련됩니다.</p>
+      </div>
+      <div class="hire__item hire__item--pending">
+        <h3 class="hire__name">우수 졸업자 입사 특전<sup>*</sup></h3>
+        <p class="item-desc">우수 졸업자에게는 채용 전형에 더해 별도의 입사 특전*이 제공됩니다.</p>
+        <p class="hire__note"><span class="badge">검토 중</span>*채용 특전의 세부 내용은 현재 검토 중입니다.</p>
+      </div>
+    </div>
+
+    <div class="cta relief-tile">
+      <svg class="construct" data-construct="cta" aria-hidden="true"></svg>
+      <p class="cta__date">12/15(화)</p>
+      <p class="cta__title">1년제 프로그램 2기 지원이 시작됩니다</p>
+      <div class="cta__actions">
+        <a class="btn btn--primary btn--lg" href="https://www.phi.design/updates">2기 오픈 알림 신청</a>
+        <a class="btn btn--ghost-inverse btn--lg" href="https://www.phi.design/admissions">지원 절차 확인하기</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p class="wordmark">Phi Institute of Design</p>
+    <p>파이인스티튜트오브디자인 · 서울특별시 성동구 왕십리로14길 36, 프리센스빌딩 1층<br>02-556-8461 · contact@phi.design · 평일 10:00 - 18:00 (점심시간 13:00 - 14:00)</p>
+    <p class="site-footer__small">리디자인 초안 — Beautiful Interface 과제. 원본: <a href="https://www.phi.design/programs">phi.design/programs</a></p>
+  </div>
+</footer>
+
+<script src="main.js"></script>
 </body>
 </html>
