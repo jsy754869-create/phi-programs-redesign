@@ -149,15 +149,15 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .pageindex { position: relative; }
 .pageindex__pill {
   all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 8px;
-  height: 40px; min-width: 196px; padding: 0 12px 0 16px; border-radius: var(--r-full);
-  background: var(--bg-secondary); color: var(--fg-primary); transition: background-color .15s;
+  height: 40px; min-width: 176px; padding: 0 12px; border-radius: var(--r-full);
+  background: transparent; color: var(--fg-primary);
 }
-.pageindex__pill:hover, .pageindex.is-open .pageindex__pill { background: var(--surface-secondary); }
 .pageindex__label { position: relative; flex: 1; height: 22px; overflow: hidden; }
-.pageindex__current { display: block; font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -.002em; white-space: nowrap; }
-.pageindex__current.is-swap { animation: idx-swap .45s var(--ease-out-sine); }
-@keyframes idx-swap { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
-.pageindex__count { font-size: 12px; line-height: 16px; color: var(--fg-tertiary); font-variant-numeric: tabular-nums; }
+.pageindex__current { display: block; font-size: 14px; line-height: 22px; font-weight: 500; letter-spacing: -.002em; white-space: nowrap; }
+/* Shopify Editions: 글자가 왼쪽에서 오른쪽으로 한 자씩 다시 쓰인다 */
+.pageindex__current .ch { display: inline-block; white-space: pre; opacity: 1; transition: opacity .22s var(--ease-out-sine); }
+.pageindex__current .ch.is-out { opacity: 0; }
+.pageindex__count { display: none; }
 .pageindex__chev { width: 12px; height: 12px; color: var(--fg-tertiary); transition: transform .3s var(--ease-out-sine); }
 .pageindex.is-open .pageindex__chev { transform: rotate(180deg); }
 @media (hover: hover) { .pageindex:hover .pageindex__chev { transform: rotate(180deg); } }

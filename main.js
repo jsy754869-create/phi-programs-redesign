@@ -296,7 +296,20 @@
   pill.addEventListener('click', e => { e.stopPropagation(); setOpen(!pidx.classList.contains('is-open')); });
   document.addEventListener('click', e => { if (!e.target.closest('.pageindex')) setOpen(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
-  let lastActive = -2;
+  let lastActive = -2, writeToken = 0;
+  // 글자를 왼쪽부터 지우고, 새 글자를 왼쪽부터 한 자씩 다시 쓴다 (Shopify Editions 원리)
+  const writeLabel = text => {
+    const token = ++writeToken;
+    const old = [...curEl.querySelectorAll('.ch')];
+    const STEP = 22;
+    old.forEach((c, i) => setTimeout(() => c.classList.add('is-out'), i * 12));
+    setTimeout(() => {
+      if (token !== writeToken) return;
+      curEl.innerHTML = [...text].map(ch => `<span class="ch is-out">${ch === ' ' ? ' ' : ch}</span>`).join('');
+      curEl.setAttribute('aria-label', text);
+      [...curEl.children].forEach((c, i) => setTimeout(() => c.classList.remove('is-out'), i * STEP));
+    }, old.length ? old.length * 12 + 120 : 0);
+  };
   navLinks.forEach(a => a.addEventListener('click', e => {
     e.preventDefault();
     setOpen(false);
@@ -335,9 +348,7 @@
     navLinks.forEach((a, i) => a.classList.toggle('is-active', i === active));
     if (active !== lastActive) {
       const a = navLinks[Math.max(active, 0)];
-      curEl.textContent = a.lastChild.textContent;
-      idxEl.textContent = active > 0 ? `${active}/5` : '';
-      curEl.classList.remove('is-swap'); void curEl.offsetWidth; curEl.classList.add('is-swap');
+      writeLabel(a.lastChild.textContent);
     }
     lastActive = active;
 
