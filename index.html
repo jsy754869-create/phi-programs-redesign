@@ -53,16 +53,21 @@
   </div>
 </section>
 
-<!-- 로컬 내비게이션 -->
-<nav class="localnav" aria-label="페이지 목차">
-  <div class="wrap localnav__inner">
-    <a href="#competency" data-nav>역량</a>
-    <a href="#courses" data-nav>주요 수업</a>
-    <a href="#learning" data-nav>태도와 배우는 방식</a>
-    <a href="#year" data-nav>1년의 흐름</a>
-    <a href="#after" data-nav>졸업 이후와 지원</a>
-  </div>
-  <div class="localnav__progress" aria-hidden="true"><span></span></div>
+<!-- 페이지 목차: 평소엔 현재 섹션만, hover/클릭 시 전체 목록 (Shopify Editions 원리) -->
+<nav class="pageindex" aria-label="페이지 목차">
+  <ol class="pageindex__list" id="pageindexList">
+    <li><a href="#competency" data-nav><span class="pageindex__no">1</span>역량</a></li>
+    <li><a href="#courses" data-nav><span class="pageindex__no">2</span>주요 수업</a></li>
+    <li><a href="#learning" data-nav><span class="pageindex__no">3</span>태도와 배우는 방식</a></li>
+    <li><a href="#year" data-nav><span class="pageindex__no">4</span>1년의 흐름</a></li>
+    <li><a href="#after" data-nav><span class="pageindex__no">5</span>졸업 이후와 지원</a></li>
+  </ol>
+  <button class="pageindex__pill" type="button" aria-expanded="false" aria-controls="pageindexList">
+    <span class="pageindex__label"><span class="pageindex__current">역량</span></span>
+    <span class="pageindex__count"><span class="pageindex__idx">1</span>/5</span>
+    <span class="pageindex__icon" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="pageindex__bar" aria-hidden="true"><span></span></span>
+  </button>
 </nav>
 
 <!-- 2. 역량 -->

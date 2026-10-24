@@ -3,7 +3,7 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const NS = 'http://www.w3.org/2000/svg';
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const navH = () => $('.localnav')?.offsetHeight || 52;
+  const navH = () => $('.site-header')?.offsetHeight || 64;
 
   /* ------------------------------------------------------------
      DATA — 기존 phi.design/programs 원고 그대로
@@ -263,8 +263,15 @@
   const navLinks = $$('[data-nav]');
   const sections = navLinks.map(a => $(a.getAttribute('href')));
   let jumpUntil = 0;
+  const pidx = $('.pageindex'), pill = $('.pageindex__pill'), curEl = $('.pageindex__current'), idxEl = $('.pageindex__idx');
+  const setOpen = open => { pidx.classList.toggle('is-open', open); pill.setAttribute('aria-expanded', String(open)); };
+  pill.addEventListener('click', e => { e.stopPropagation(); setOpen(!pidx.classList.contains('is-open')); });
+  document.addEventListener('click', e => { if (!e.target.closest('.pageindex')) setOpen(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  let lastActive = -2;
   navLinks.forEach(a => a.addEventListener('click', e => {
     e.preventDefault();
+    setOpen(false);
     jumpUntil = performance.now() + 1200;
     $(a.getAttribute('href')).scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
     history.replaceState(null, '', a.getAttribute('href'));
@@ -295,10 +302,18 @@
 
     // progress + active section
     const max = document.documentElement.scrollHeight - vh;
-    $('.localnav__progress span').style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+    $('.pageindex__bar span').style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
     let active = -1;
-    sections.forEach((s, i) => { if (s.getBoundingClientRect().top <= nh + 120) active = i; });
+    sections.forEach((s, i) => { if (s.getBoundingClientRect().top <= nh + vh * 0.35) active = i; });
     navLinks.forEach((a, i) => a.classList.toggle('is-active', i === active));
+    pidx.classList.toggle('is-visible', active >= 0);
+    if (active !== lastActive && active >= 0) {
+      curEl.textContent = navLinks[active].lastChild.textContent;
+      idxEl.textContent = active + 1;
+      curEl.classList.remove('is-swap'); void curEl.offsetWidth; curEl.classList.add('is-swap');
+    }
+    if (active < 0) setOpen(false);
+    lastActive = active;
 
     // devices auto-open (Anduril): 항목 윗변이 화면 위에서 48% 안쪽에 들어오면 한 번
     if (performance.now() > jumpUntil) {
