@@ -113,13 +113,41 @@
      RENDER
      ------------------------------------------------------------ */
   const ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  $('#courseList').innerHTML = COURSES.map(([en, ko, slug, d]) => `
-    <li class="course">
-      <h3 class="course__name">${en}</h3>
-      <p class="course__ko">${ko}</p>
-      <p class="item-desc">${d}</p>
-      <a class="course__link" href="https://www.phi.design/programs/courses/${slug}" target="_blank" rel="noopener">Course Profile ${ARROW}</a>
+  /* 주요 수업 (P0-2): 같은 비교 항목을 같은 위치에 (Apple Mac 라인업 원리) + 페이지 안 모달 */
+  const list = $('#courseList');
+  list.innerHTML = `<li class="courses__head" aria-hidden="true"><span>수업</span><span>전문가</span><span>이 수업을 마치면</span><span></span></li>` +
+    COURSES.map(([en, ko, slug]) => `
+    <li class="course" data-slug="${slug}">
+      <button class="course__row" type="button" aria-haspopup="dialog">
+        <span class="course__title"><b class="course__name">${en}</b><span class="course__ko">${ko}</span></span>
+        <span class="course__expert" data-f="expert"></span>
+        <span class="course__after" data-f="after"></span>
+        <span class="course__more">자세히 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
     </li>`).join('');
+  const modal = $('#courseModal');
+  let PROFILES = {};
+  fetch('data/course-profiles.json').then(r => r.json()).then(d => {
+    PROFILES = d;
+    $$('.course', list).forEach(li => {
+      const p = d[li.dataset.slug]; if (!p) return;
+      li.querySelector('[data-f=expert]').textContent = p.expert;
+      li.querySelector('[data-f=after]').textContent = p.after[0];
+    });
+  });
+  const openCourse = slug => {
+    const c = COURSES.find(x => x[2] === slug), p = PROFILES[slug]; if (!c || !p) return;
+    $('.cm__en', modal).textContent = c[0];
+    $('.cm__ko', modal).textContent = c[1];
+    $('.cm__expert', modal).textContent = p.expert;
+    $('.cm__bio', modal).textContent = p.bio;
+    $('.cm__overview', modal).innerHTML = p.overview.map(t => `<p>${t}</p>`).join('');
+    $('.cm__goals', modal).innerHTML = p.before.map((b, i) => `<li><span class="cm__n">${i + 1}</span><p class="cm__b">${b}</p><span class="cm__arrow" aria-hidden="true"></span><p class="cm__a">${p.after[i] || ''}</p></li>`).join('');
+    $('.cm__src', modal).href = `https://www.phi.design/programs/courses/${slug}`;
+    modal.showModal(); $('.cm__body', modal).scrollTop = 0;
+  };
+  list.addEventListener('click', e => { const li = e.target.closest('.course'); if (li) openCourse(li.dataset.slug); });
+  modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('.cm__close')) modal.close(); });
 
   $('#devices').innerHTML = DEVICES.map(([n, d], i) => `
     <div class="device">

@@ -208,21 +208,51 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 /* ============================================================
    3. 주요 수업 — 비교하며 훑기(L1) + 상세 진입점(L2)
    ============================================================ */
-.courses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 32px; row-gap: 0; }
-.course { display: flex; flex-direction: column; padding: 28px 0 36px; border-top: 1px solid var(--line-opaque); }
+.courses { border-bottom: 1px solid var(--line-opaque); }
+.courses__head, .course__row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 2fr) minmax(0, 5fr) 88px; column-gap: 32px; align-items: start; }
+.courses__head { padding: 0 0 12px; border-bottom: 1px solid var(--fg-primary); font-size: 13px; line-height: 18px; color: var(--fg-tertiary); }
+.course { border-top: 1px solid var(--line-opaque); }
+.courses__head + .course { border-top: 0; }
+.course__row { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 2fr) minmax(0, 5fr) 88px; column-gap: 32px; padding: 24px 0; transition: background-color .2s; }
+.course__row:hover { background: var(--bg-secondary); box-shadow: -16px 0 0 var(--bg-secondary), 16px 0 0 var(--bg-secondary); }
+.course__row:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.course__title { display: flex; flex-direction: column; gap: 2px; }
 .course__name { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: -.012em; }
-.course__ko { font-size: 14px; line-height: 20px; color: var(--fg-tertiary); margin-top: 2px; }
-.course .item-desc { margin-top: 16px; flex: 1; }
-.course__link {
-  align-self: flex-start; margin-top: 20px; display: inline-flex; align-items: center; gap: 6px;
-  font-size: 14px; line-height: 20px; font-weight: 600; color: var(--brand); text-decoration: none;
-  padding: 7px 12px 7px 14px; border-radius: var(--r-8); background: var(--brand-subtle); transition: background-color .15s;
-}
-.course__link:hover { background: rgba(0,102,255,.1); }
-.course__link svg { width: 14px; height: 14px; transition: transform .2s; }
-.course__link:hover svg { transform: translate(2px, -2px); }
-@media (max-width: 1000px) { .courses { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 640px)  { .courses { grid-template-columns: 1fr; } }
+.course__ko { font-size: 14px; line-height: 20px; color: var(--fg-tertiary); }
+.course__expert { font-size: 15px; line-height: 28px; font-weight: 600; color: var(--fg-primary); }
+.course__after { font-size: 15px; line-height: 24px; color: var(--fg-secondary); padding-top: 2px; }
+.course__more { justify-self: end; display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 28px; font-weight: 600; color: var(--brand); }
+.course__more svg { width: 14px; height: 14px; transition: transform .2s; }
+.course__row:hover .course__more svg { transform: translateX(3px); }
+
+/* 수업 상세 모달 */
+.cm { padding: 0; border: 0; background: transparent; max-width: none; max-height: none; width: 100%; height: 100%; }
+.cm::backdrop { background: rgba(23,23,25,.48); backdrop-filter: blur(2px); }
+.cm[open] .cm__panel { animation: cm-in .35s var(--ease-out-sine); }
+@keyframes cm-in { from { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
+.cm__panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(880px, calc(100vw - 48px)); max-height: calc(100vh - 96px); display: flex; flex-direction: column; background: #fff; border-radius: 24px; box-shadow: 0 24px 64px rgba(0,0,0,.24); overflow: hidden; }
+.cm__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; padding: 32px 40px 20px; border-bottom: 1px solid var(--line-soft); }
+.cm__en { font-size: 28px; line-height: 38px; font-weight: 700; letter-spacing: -.0236em; }
+.cm__ko { font-size: 15px; color: var(--fg-tertiary); margin-top: 2px; }
+.cm__close { all: unset; cursor: pointer; width: 40px; height: 40px; border-radius: var(--r-full); display: grid; place-items: center; background: var(--bg-secondary); }
+.cm__close:hover { background: var(--surface-secondary); }
+.cm__close svg { width: 16px; height: 16px; }
+.cm__body { overflow: auto; padding: 8px 40px 40px; }
+.cm__sec { padding-top: 28px; }
+.cm__label { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--fg-tertiary); margin-bottom: 12px; }
+.cm__ba-head, .cm__goals li { display: grid; grid-template-columns: 24px minmax(0, 1fr) 28px minmax(0, 1fr); column-gap: 12px; }
+.cm__ba-head { font-size: 13px; font-weight: 600; color: var(--fg-tertiary); padding-bottom: 8px; border-bottom: 1px solid var(--line-opaque); }
+.cm__goals li { padding: 14px 0; border-bottom: 1px solid var(--line-soft); align-items: start; }
+.cm__n { font-size: 13px; line-height: 24px; color: var(--fg-tertiary); font-variant-numeric: tabular-nums; }
+.cm__b { font-size: 15px; line-height: 24px; color: var(--fg-tertiary); }
+.cm__a { font-size: 15px; line-height: 24px; color: var(--fg-primary); font-weight: 500; }
+.cm__arrow { height: 24px; position: relative; }
+.cm__arrow::before { content: ""; position: absolute; left: 4px; right: 8px; top: 12px; height: 1px; background: var(--fg-quaternary); }
+.cm__arrow::after { content: ""; position: absolute; right: 7px; top: 8.5px; width: 6px; height: 6px; border-top: 1px solid var(--fg-quaternary); border-right: 1px solid var(--fg-quaternary); transform: rotate(45deg); }
+.cm__overview p, .cm__bio { font-size: 15px; line-height: 26px; color: var(--fg-secondary); }
+.cm__overview p + p { margin-top: 10px; }
+.cm__expert { font-size: 17px; line-height: 26px; font-weight: 700; margin-bottom: 6px; }
+.cm__src { display: inline-block; margin-top: 28px; font-size: 14px; font-weight: 600; color: var(--brand); text-decoration: none; }
 
 /* ============================================================
    4-a. 태도 — 역량과 다른 그룹 신호(밝은 면 + 작도 도형)

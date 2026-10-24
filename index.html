@@ -231,6 +231,23 @@
   </div>
 </footer>
 
+<dialog class="cm" id="courseModal" aria-labelledby="cmTitle">
+  <div class="cm__panel">
+    <header class="cm__head">
+      <div><h2 class="cm__en" id="cmTitle"></h2><p class="cm__ko"></p></div>
+      <button class="cm__close" type="button" aria-label="닫기"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </header>
+    <div class="cm__body">
+      <section class="cm__sec"><h3 class="cm__label">학습 목표</h3>
+        <div class="cm__ba-head" aria-hidden="true"><span></span><span>Before</span><span></span><span>After</span></div>
+        <ol class="cm__goals"></ol></section>
+      <section class="cm__sec"><h3 class="cm__label">수업 개요</h3><div class="cm__overview"></div></section>
+      <section class="cm__sec"><h3 class="cm__label">전문가</h3><p class="cm__expert"></p><p class="cm__bio"></p></section>
+      <a class="cm__src" href="#" target="_blank" rel="noopener">phi.design에서 원문 보기</a>
+    </div>
+  </div>
+</dialog>
+
 <script src="main.js"></script>
 </body>
 </html>
