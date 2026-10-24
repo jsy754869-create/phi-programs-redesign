@@ -32,7 +32,7 @@
   /* spacing (4pt) */
   --gutter: clamp(20px, 4vw, 48px);
   --section-gap: clamp(96px, 12vw, 176px);
-  --navh: 64px;
+  --navh: 84px;
 
   /* motion */
   --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
@@ -98,7 +98,7 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 /* ============================================================
    1. Hero — 제목(위치) / 리드(핵심 메시지) / 라벨-값(관문 조건)
    ============================================================ */
-.hero { padding: clamp(56px, 8vw, 104px) 0 0; }
+.hero { padding: 152px 0 0; }
 .hero__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: end; }
 .hero__title { font-size: clamp(40px, 5vw, 56px); line-height: 1.2; font-weight: 700; letter-spacing: -.0319em; }
 .hero__sub { margin-top: 8px; font-size: 20px; line-height: 28px; color: var(--fg-tertiary); letter-spacing: -.012em; }
@@ -132,39 +132,43 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
   .facts > div, .facts > div + div { padding: 16px 16px 20px 0; border-left: 0; border-bottom: 1px solid var(--line-soft); }
 }
 
-/* ---------- page index (P0-1: Shopify Editions 원리) ----------
-   평소: 하단 가운데 알약 하나에 "현재 섹션"만. hover/클릭: 위로 전체 목록이 펼쳐짐. */
-.pageindex {
-  position: fixed; left: 50%; bottom: 24px; z-index: 50; transform: translate(-50%, 16px);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  opacity: 0; pointer-events: none; transition: opacity .3s var(--ease-out-sine), transform .3s var(--ease-out-sine);
+/* ---------- top bar (P0-1 v2): 상단 알약 하나 = 현재 섹션 + 사이트 메뉴 + CTA ---------- */
+.topbar {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 50;
+  display: flex; align-items: center; gap: 4px; height: 52px; padding: 0 6px 0 20px;
+  border-radius: var(--r-full); background: rgba(255,255,255,.92);
+  backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px);
+  box-shadow: 0 0 1px rgba(0,0,0,.1), 0 2px 6px rgba(0,0,0,.06), 0 12px 32px rgba(0,0,0,.10);
 }
-.pageindex.is-visible { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.topbar__brand { font-weight: 800; font-size: 16px; letter-spacing: -.02em; text-decoration: none; margin-right: 8px; }
+.topbar__sep { width: 1px; height: 20px; background: var(--line-opaque); margin: 0 8px; }
+.topbar__link { padding: 8px 12px; border-radius: var(--r-full); font-size: 14px; line-height: 20px; text-decoration: none; color: var(--fg-secondary); transition: background-color .15s, color .15s; }
+.topbar__link:hover { background: var(--bg-secondary); color: var(--fg-primary); }
+.topbar__cta { margin-left: 6px; height: 40px; border-radius: var(--r-full); padding: 0 18px; font-size: 14px; }
+
+.pageindex { position: relative; }
 .pageindex__pill {
-  all: unset; box-sizing: border-box; cursor: pointer; position: relative; overflow: hidden;
-  display: flex; align-items: center; gap: 12px; height: 48px; min-width: 248px; padding: 0 16px 0 22px;
-  border-radius: var(--r-full); background: #fff; color: var(--fg-primary);
-  box-shadow: 0 0 1px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.12);
+  all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 8px;
+  height: 40px; min-width: 196px; padding: 0 12px 0 16px; border-radius: var(--r-full);
+  background: var(--bg-secondary); color: var(--fg-primary); transition: background-color .15s;
 }
+.pageindex__pill:hover, .pageindex.is-open .pageindex__pill { background: var(--surface-secondary); }
 .pageindex__label { position: relative; flex: 1; height: 22px; overflow: hidden; }
 .pageindex__current { display: block; font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -.002em; white-space: nowrap; }
 .pageindex__current.is-swap { animation: idx-swap .45s var(--ease-out-sine); }
 @keyframes idx-swap { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
 .pageindex__count { font-size: 12px; line-height: 16px; color: var(--fg-tertiary); font-variant-numeric: tabular-nums; }
-.pageindex__icon { display: grid; gap: 3px; width: 16px; }
-.pageindex__icon i { display: block; height: 1.5px; background: var(--fg-primary); border-radius: 1px; transition: transform .3s var(--ease-out-sine), opacity .3s; }
-.pageindex.is-open .pageindex__icon i:nth-child(1) { transform: translateY(4.5px) rotate(45deg); }
-.pageindex.is-open .pageindex__icon i:nth-child(2) { opacity: 0; }
-.pageindex.is-open .pageindex__icon i:nth-child(3) { transform: translateY(-4.5px) rotate(-45deg); }
-.pageindex__bar { position: absolute; left: 22px; right: 22px; bottom: 7px; height: 2px; border-radius: 1px; background: var(--line-soft); }
-.pageindex__bar span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--fg-primary); }
+.pageindex__chev { width: 12px; height: 12px; color: var(--fg-tertiary); transition: transform .3s var(--ease-out-sine); }
+.pageindex.is-open .pageindex__chev { transform: rotate(180deg); }
+@media (hover: hover) { .pageindex:hover .pageindex__chev { transform: rotate(180deg); } }
 
 .pageindex__list {
-  min-width: 248px; padding: 8px; border-radius: var(--r-20); background: #fff;
+  position: absolute; top: calc(100% + 12px); left: 0; min-width: 248px; padding: 8px; border-radius: var(--r-20); background: #fff;
   box-shadow: 0 0 1px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.12);
-  opacity: 0; transform: translateY(8px) scale(.98); transform-origin: bottom center; pointer-events: none;
+  opacity: 0; transform: translateY(-6px) scale(.98); transform-origin: top left; pointer-events: none;
   transition: opacity .25s var(--ease-out-sine), transform .3s var(--ease-out-sine);
 }
+.pageindex__list::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 14px; } /* hover 다리 */
 .pageindex.is-open .pageindex__list { opacity: 1; transform: none; pointer-events: auto; }
 @media (hover: hover) { .pageindex:hover .pageindex__list { opacity: 1; transform: none; pointer-events: auto; } }
 .pageindex__list a {

@@ -12,18 +12,32 @@
 </head>
 <body>
 
-<header class="site-header">
-  <div class="wrap site-header__inner">
-    <a class="wordmark" href="https://www.phi.design/">Phi Institute of Design</a>
-    <nav class="site-nav" aria-label="사이트">
-      <a href="https://www.phi.design/about">About</a>
-      <a href="https://www.phi.design/programs" aria-current="page">Programs</a>
-      <a href="https://www.phi.design/experts">Experts</a>
-      <a href="https://www.phi.design/admissions">Admissions</a>
-    </nav>
-    <a class="btn btn--primary btn--sm" href="https://www.phi.design/updates">2기 오픈 알림 신청</a>
+
+
+<!-- 상단 단일 내비게이션: 현재 섹션(hover 시 섹션 목록) + 사이트 메뉴 + CTA (Shopify Editions 원리) -->
+<nav class="topbar" aria-label="내비게이션">
+  <a class="topbar__brand" href="https://www.phi.design/">Phi</a>
+  <div class="pageindex">
+    <button class="pageindex__pill" type="button" aria-expanded="false" aria-controls="pageindexList">
+      <span class="pageindex__label"><span class="pageindex__current">Programs</span></span>
+      <span class="pageindex__count"><span class="pageindex__idx"></span></span>
+      <svg class="pageindex__chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <ol class="pageindex__list" id="pageindexList">
+      <li><a href="#top" data-nav><span class="pageindex__no">0</span>Programs</a></li>
+      <li><a href="#competency" data-nav><span class="pageindex__no">1</span>역량</a></li>
+      <li><a href="#courses" data-nav><span class="pageindex__no">2</span>주요 수업</a></li>
+      <li><a href="#learning" data-nav><span class="pageindex__no">3</span>태도와 배우는 방식</a></li>
+      <li><a href="#year" data-nav><span class="pageindex__no">4</span>1년의 흐름</a></li>
+      <li><a href="#after" data-nav><span class="pageindex__no">5</span>졸업 이후와 지원</a></li>
+    </ol>
   </div>
-</header>
+  <span class="topbar__sep" aria-hidden="true"></span>
+  <a class="topbar__link" href="https://www.phi.design/about">About</a>
+  <a class="topbar__link" href="https://www.phi.design/experts">Experts</a>
+  <a class="topbar__link" href="https://www.phi.design/admissions">Admissions</a>
+  <a class="btn btn--primary btn--sm topbar__cta" href="https://www.phi.design/updates">2기 오픈 알림 신청</a>
+</nav>
 
 <main>
 
@@ -53,22 +67,7 @@
   </div>
 </section>
 
-<!-- 페이지 목차: 평소엔 현재 섹션만, hover/클릭 시 전체 목록 (Shopify Editions 원리) -->
-<nav class="pageindex" aria-label="페이지 목차">
-  <ol class="pageindex__list" id="pageindexList">
-    <li><a href="#competency" data-nav><span class="pageindex__no">1</span>역량</a></li>
-    <li><a href="#courses" data-nav><span class="pageindex__no">2</span>주요 수업</a></li>
-    <li><a href="#learning" data-nav><span class="pageindex__no">3</span>태도와 배우는 방식</a></li>
-    <li><a href="#year" data-nav><span class="pageindex__no">4</span>1년의 흐름</a></li>
-    <li><a href="#after" data-nav><span class="pageindex__no">5</span>졸업 이후와 지원</a></li>
-  </ol>
-  <button class="pageindex__pill" type="button" aria-expanded="false" aria-controls="pageindexList">
-    <span class="pageindex__label"><span class="pageindex__current">역량</span></span>
-    <span class="pageindex__count"><span class="pageindex__idx">1</span>/5</span>
-    <span class="pageindex__icon" aria-hidden="true"><i></i><i></i><i></i></span>
-    <span class="pageindex__bar" aria-hidden="true"><span></span></span>
-  </button>
-</nav>
+
 
 <!-- 2. 역량 -->
 <section class="section" id="competency" data-section>

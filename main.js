@@ -3,7 +3,7 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const NS = 'http://www.w3.org/2000/svg';
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const navH = () => $('.site-header')?.offsetHeight || 64;
+  const navH = () => 84;
 
   /* ------------------------------------------------------------
      DATA — 기존 phi.design/programs 원고 그대로
@@ -302,17 +302,15 @@
 
     // progress + active section
     const max = document.documentElement.scrollHeight - vh;
-    $('.pageindex__bar span').style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
     let active = -1;
     sections.forEach((s, i) => { if (s.getBoundingClientRect().top <= nh + vh * 0.35) active = i; });
     navLinks.forEach((a, i) => a.classList.toggle('is-active', i === active));
-    pidx.classList.toggle('is-visible', active >= 0);
-    if (active !== lastActive && active >= 0) {
-      curEl.textContent = navLinks[active].lastChild.textContent;
-      idxEl.textContent = active + 1;
+    if (active !== lastActive) {
+      const a = navLinks[Math.max(active, 0)];
+      curEl.textContent = a.lastChild.textContent;
+      idxEl.textContent = active > 0 ? `${active}/5` : '';
       curEl.classList.remove('is-swap'); void curEl.offsetWidth; curEl.classList.add('is-swap');
     }
-    if (active < 0) setOpen(false);
     lastActive = active;
 
     // devices auto-open (Anduril): 항목 윗변이 화면 위에서 48% 안쪽에 들어오면 한 번
