@@ -113,28 +113,69 @@
      RENDER
      ------------------------------------------------------------ */
   const ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  /* 주요 수업 (P0-2): 같은 비교 항목을 같은 위치에 (Apple Mac 라인업 원리) + 페이지 안 모달 */
+  /* 주요 수업 (v1.3): 목차가 곧 전시 — T—BI Showcase 18 원리
+     · 12개 목차는 한 화면에 모두 보이고(전체/위치), 기준선을 지나는 하나만 크게 전시(인상)
+     · 스크롤이 기준선을 움직이고, 행에 올리면 즉시 그 수업으로 전환
+     · 이미지 배정은 시각적 다양성 기준 (수업 내용과 의미 연결 없음, D-016) */
+  const ART = ['whole-over-parts.jpg', 'sfumato.jpg', 'feynman-diagram.jpg', 'peer-best-reference.jpg', 'expert-thinking-demo.jpg', 'observe-decision-process.jpg', 'baptism-of-christ.jpg', 'adaptive-tracks.jpg', 'le-corbusier-2.jpg', 'apprenticeship-education.jpg', 'peer-review.jpg', 'protege-effect.jpg'];
+  const pad2 = n => String(n).padStart(2, '0');
   const list = $('#courseList');
-  list.innerHTML = `<li class="courses__head" aria-hidden="true"><span>수업</span><span>전문가</span><span>이 수업을 마치면</span><span></span></li>` +
-    COURSES.map(([en, ko, slug]) => `
-    <li class="course" data-slug="${slug}">
-      <button class="course__row" type="button" aria-haspopup="dialog">
-        <span class="course__title"><b class="course__name">${en}</b><span class="course__ko">${ko}</span></span>
-        <span class="course__expert" data-f="expert"></span>
-        <span class="course__after" data-f="after"></span>
-        <span class="course__more">자세히 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </button>
+  list.innerHTML = COURSES.map(([en, ko, slug], i) => `
+    <li class="gi" data-i="${i}" data-slug="${slug}">
+      <button class="gi__btn" type="button" aria-haspopup="dialog"><span class="gi__en">${en}</span><span class="gi__ko">${ko}</span><span class="gi__no">${pad2(i + 1)}</span></button>
     </li>`).join('');
+  const gallery = $('#gallery'), stage = $('.gallery__stage'), artBox = $('.gallery__art'), imgsBox = $('.gallery__imgs'), guide = $('.gallery__guide');
+  imgsBox.innerHTML = ART.map((f, i) => `<img src="assets/gallery/${f}" alt="" decoding="async" data-i="${i}">`).join('');
+  const imgs = $$('img', imgsBox), rows = $$('.gi', list);
+  const L = { no: $('.gallery__no'), en: $('.gallery__en'), ko: $('.gallery__ko'), expert: $('.gallery__expert'), after: $('.gallery__after'), label: $('.gallery__label') };
   const modal = $('#courseModal');
-  let PROFILES = {};
-  fetch('data/course-profiles.json').then(r => r.json()).then(d => {
-    PROFILES = d;
-    $$('.course', list).forEach(li => {
-      const p = d[li.dataset.slug]; if (!p) return;
-      li.querySelector('[data-f=expert]').textContent = p.expert;
-      li.querySelector('[data-f=after]').textContent = p.after[0];
-    });
+  let PROFILES = {}, gActive = -1, hoverLock = false, scrollActive = 0;
+
+  // 전시물 실제 윤곽(이미지 여백 제외, 파일에서 측정한 비율) — 윤곽 기준으로 크기를 맞추고 작도선을 붙인다
+  const BOX = [[0.185,0.114,0.820,0.900], [0.173,0.155,0.827,0.849], [0.156,0.199,0.843,0.785], [0.152,0.110,0.850,0.891], [0.144,0.179,0.860,0.820], [0.117,0.113,0.880,0.888], [0.145,0.123,0.857,0.874], [0.145,0.128,0.856,0.892], [0.239,0.092,0.756,0.915], [0.116,0.118,0.889,0.894], [0.129,0.150,0.872,0.848], [0.115,0.161,0.886,0.841]];
+  const fit = i => {
+    const img = imgs[i]; if (!img.naturalWidth) return null;
+    const W = artBox.clientWidth, H = artBox.clientHeight, nw = img.naturalWidth, nh = img.naturalHeight;
+    const [x0, y0, x1, y1] = BOX[i], ow = (x1 - x0) * nw, oh = (y1 - y0) * nh;
+    const k = Math.min(W * 0.9 / ow, H * 0.86 / oh);
+    const ox = (W - ow * k) / 2, oy = (H - oh * k) / 2;
+    Object.assign(img.style, { width: `${nw * k}px`, height: `${nh * k}px`, left: `${ox - x0 * nw * k}px`, top: `${oy - y0 * nh * k}px` });
+    return [ox, oy, ox + ow * k, oy + oh * k];
+  };
+  const placeLines = i => {
+    const r = fit(i); if (!r) return;
+    artBox.style.setProperty('--gx1', `${r[0]}px`); artBox.style.setProperty('--gx2', `${r[2]}px`);
+    artBox.style.setProperty('--gy1', `${r[1]}px`); artBox.style.setProperty('--gy2', `${r[3]}px`);
+  };
+  const placeGuide = () => {
+    const row = rows[gActive]; if (!row) return;
+    guide.style.transform = `translateY(${row.offsetTop + list.offsetTop + row.offsetHeight}px)`;
+    guide.style.width = `${artBox.offsetLeft + artBox.offsetWidth + 24}px`;
+    guide.style.setProperty('--split', `${list.offsetLeft + list.offsetWidth}px`);
+  };
+  imgs.forEach((im, i) => im.complete ? fit(i) : im.addEventListener('load', () => fit(i), { once: true }));
+  const setCourse = i => {
+    if (i === gActive) return;
+    gActive = i;
+    rows.forEach((r, k) => r.classList.toggle('is-on', k === i));
+    imgs.forEach((im, k) => im.classList.toggle('is-on', k === i));
+    placeGuide();
+    if (imgs[i].complete) placeLines(i); else imgs[i].addEventListener('load', () => gActive === i && placeLines(i), { once: true });
+    const [en, ko, slug] = COURSES[i], p = PROFILES[slug] || {};
+    L.label.classList.remove('is-in'); void L.label.offsetWidth;
+    L.no.textContent = `No. ${pad2(i + 1)}`; L.en.textContent = en; L.ko.textContent = ko;
+    L.expert.textContent = p.expert || ''; L.after.textContent = (p.after && p.after[0]) || '';
+    L.label.classList.add('is-in');
+  };
+  fetch('data/course-profiles.json').then(r => r.json()).then(d => { PROFILES = d; const k = gActive; gActive = -1; setCourse(Math.max(k, 0)); });
+  setCourse(0);
+  addEventListener('resize', () => { imgs.forEach((_, i) => fit(i)); placeLines(gActive); placeGuide(); });
+
+  rows.forEach((r, i) => {
+    r.addEventListener('mouseenter', () => { hoverLock = true; setCourse(i); });
+    r.addEventListener('focusin', () => setCourse(i));
   });
+  list.addEventListener('mouseleave', () => { hoverLock = false; setCourse(scrollActive); });
   const openCourse = slug => {
     const c = COURSES.find(x => x[2] === slug), p = PROFILES[slug]; if (!c || !p) return;
     $('.cm__en', modal).textContent = c[0];
@@ -146,7 +187,9 @@
     $('.cm__src', modal).href = `https://www.phi.design/programs/courses/${slug}`;
     modal.showModal(); $('.cm__body', modal).scrollTop = 0;
   };
-  list.addEventListener('click', e => { const li = e.target.closest('.course'); if (li) openCourse(li.dataset.slug); });
+  list.addEventListener('click', e => { const li = e.target.closest('.gi'); if (li) openCourse(li.dataset.slug); });
+  $('.gallery__more').addEventListener('click', () => openCourse(COURSES[gActive][2]));
+  artBox.addEventListener('click', () => openCourse(COURSES[gActive][2]));
   modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('.cm__close')) modal.close(); });
 
   $('#devices').innerHTML = DEVICES.map(([n, d], i) => `
@@ -330,6 +373,9 @@
   };
   scrubMQ.addEventListener?.('change', applyScrubMode);
   applyScrubMode();
+  const applyGalleryMode = () => gallery.classList.toggle('is-scroll', scrubMQ.matches);
+  scrubMQ.addEventListener?.('change', applyGalleryMode);
+  applyGalleryMode();
 
   let lastY = scrollY, ticking = false;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -351,6 +397,15 @@
       writeLabel(a.lastChild.textContent);
     }
     lastActive = active;
+
+    // 주요 수업 갤러리: 스티키 구간 진행도 → 기준선을 지나는 수업
+    if (gallery.classList.contains('is-scroll')) {
+      const r = gallery.getBoundingClientRect();
+      const span = gallery.offsetHeight - vh;
+      const u = clamp(-r.top / span, 0, 0.9999);
+      scrollActive = Math.floor(u * COURSES.length);
+      if (!hoverLock) setCourse(scrollActive);
+    }
 
     // devices auto-open (Anduril): 항목 윗변이 화면 위에서 48% 안쪽에 들어오면 한 번
     if (performance.now() > jumpUntil) {

@@ -208,22 +208,79 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 /* ============================================================
    3. 주요 수업 — 비교하며 훑기(L1) + 상세 진입점(L2)
    ============================================================ */
-.courses { border-bottom: 1px solid var(--line-opaque); }
-.courses__head, .course__row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 2fr) minmax(0, 5fr) 88px; column-gap: 32px; align-items: start; }
-.courses__head { padding: 0 0 12px; border-bottom: 1px solid var(--fg-primary); font-size: 13px; line-height: 18px; color: var(--fg-tertiary); }
-.course { border-top: 1px solid var(--line-opaque); }
-.courses__head + .course { border-top: 0; }
-.course__row { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 2fr) minmax(0, 5fr) 88px; column-gap: 32px; padding: 24px 0; transition: background-color .2s; }
-.course__row:hover { background: var(--bg-secondary); box-shadow: -16px 0 0 var(--bg-secondary), 16px 0 0 var(--bg-secondary); }
-.course__row:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-.course__title { display: flex; flex-direction: column; gap: 2px; }
-.course__name { font-size: 20px; line-height: 28px; font-weight: 700; letter-spacing: -.012em; }
-.course__ko { font-size: 14px; line-height: 20px; color: var(--fg-tertiary); }
-.course__expert { font-size: 15px; line-height: 28px; font-weight: 600; color: var(--fg-primary); }
-.course__after { font-size: 15px; line-height: 24px; color: var(--fg-secondary); padding-top: 2px; }
-.course__more { justify-self: end; display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 28px; font-weight: 600; color: var(--brand); }
-.course__more svg { width: 14px; height: 14px; transition: transform .2s; }
-.course__row:hover .course__more svg { transform: translateX(3px); }
+/* 주요 수업 갤러리 (v1.3) — 목차가 곧 전시. 어두운 전시실 안에서 기준선을 지나는 한 점만 조명 */
+.gallery { position: relative; background: var(--relief); color: #fff; }
+.gallery.is-scroll { height: calc(100vh + 11 * 34vh); }
+.gallery__stage {
+  position: relative; height: 100vh; min-height: 720px; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); column-gap: 48px;
+  padding: 120px var(--gutter) 64px; max-width: 1600px; margin: 0 auto; box-sizing: border-box;
+}
+.gallery.is-scroll .gallery__stage { position: sticky; top: 0; }
+/* 기준선: 활성 행에서 전시물까지 가로지르는 작도선 */
+.gallery__guide {
+  position: absolute; left: 0; top: -1px; height: 1px; width: 70%; pointer-events: none; z-index: 2;
+  background: linear-gradient(90deg, rgba(255,255,255,.9) 0, rgba(255,255,255,.9) var(--split, 33%), rgba(255,255,255,.18) var(--split, 33%));
+  transition: transform .6s var(--ease-out-sine);
+}
+.gallery__index { list-style: none; margin: 0; padding: 0; align-self: center; position: relative; z-index: 1; }
+.gi { border-top: 1px solid rgba(255,255,255,.12); }
+.gi:last-child { border-bottom: 1px solid rgba(255,255,255,.12); }
+.gi__btn {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; column-gap: 12px;
+  height: clamp(40px, calc((100vh - 200px) / 12), 56px); align-content: center;
+  color: rgba(255,255,255,.34); transition: color .3s var(--ease-out-sine);
+}
+.gi__en { font-size: 18px; line-height: 24px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+.gi__ko { font-size: 13px; line-height: 18px; color: inherit; opacity: 0; transform: translateX(-6px); transition: opacity .3s var(--ease-out-sine), transform .3s var(--ease-out-sine); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gi__no { font-size: 13px; line-height: 18px; font-variant-numeric: tabular-nums; }
+.gi__btn:hover { color: rgba(255,255,255,.72); }
+.gi.is-on .gi__btn { color: #fff; }
+.gi.is-on .gi__ko { opacity: .6; transform: none; }
+.gi__btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+.gallery__art { position: relative; margin: 0; align-self: stretch; cursor: zoom-in; }
+.gallery__imgs { position: absolute; inset: 0; background: var(--relief); isolation: isolate; }
+.gallery__imgs img {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%; max-width: none; mix-blend-mode: lighten;
+  opacity: 0; transform: scale(1.025); transition: opacity .35s var(--ease-out-sine), transform .9s var(--ease-out-sine);
+}
+.gallery__imgs img.is-on { opacity: 1; transform: none; transition: opacity .7s var(--ease-out-sine) .08s, transform .9s var(--ease-out-sine); }
+/* 전시물 외곽을 연장한 작도선 — 수업이 바뀌면 새 전시물의 윤곽으로 미끄러진다 */
+.gl { position: absolute; background: rgba(255,255,255,.16); pointer-events: none; transition: transform .7s var(--ease-out-sine); }
+.gl--t, .gl--b { left: -24px; right: -24px; height: 1px; top: 0; }
+.gl--l, .gl--r { top: -48px; bottom: -32px; width: 1px; left: 0; }
+.gl--t { transform: translateY(var(--gy1, 0)); }
+.gl--b { transform: translateY(var(--gy2, 100%)); }
+.gl--l { transform: translateX(var(--gx1, 0)); }
+.gl--r { transform: translateX(var(--gx2, 100%)); }
+
+/* 캡션: 박물관 벽 라벨 */
+.gallery__label { align-self: end; position: relative; z-index: 1; }
+.gallery__label.is-in > * { animation: label-in .5s var(--ease-out-sine) both; }
+.gallery__label.is-in > :nth-child(2) { animation-delay: .04s; }
+.gallery__label.is-in > :nth-child(3) { animation-delay: .08s; }
+.gallery__label.is-in > :nth-child(4) { animation-delay: .12s; }
+.gallery__label.is-in > :nth-child(5) { animation-delay: .16s; }
+@keyframes label-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.gallery__no { margin: 0 0 16px; font-size: 13px; line-height: 18px; color: rgba(255,255,255,.5); font-variant-numeric: tabular-nums; }
+.gallery__en { margin: 0; font-size: 32px; line-height: 40px; font-weight: 700; letter-spacing: -.02em; }
+.gallery__ko { margin: 4px 0 0; font-size: 16px; line-height: 24px; color: rgba(255,255,255,.62); }
+.gallery__meta { margin: 32px 0 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.16); display: grid; gap: 16px; }
+.gallery__meta dt { font-size: 12px; line-height: 16px; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+.gallery__meta dd { margin: 0; font-size: 15px; line-height: 24px; color: rgba(255,255,255,.88); }
+.gallery__expert { font-weight: 600; }
+.gallery__more {
+  all: unset; box-sizing: border-box; cursor: pointer; margin-top: 28px;
+  display: inline-flex; align-items: center; gap: 4px; height: 44px; padding: 0 18px 0 20px;
+  border-radius: var(--r-full); background: #fff; color: var(--fg-primary); font-size: 15px; font-weight: 600;
+  transition: background-color .2s;
+}
+.gallery__more svg { width: 16px; height: 16px; transition: transform .2s; }
+.gallery__more:hover { background: #e9e9ec; }
+.gallery__more:hover svg { transform: translateX(3px); }
+.gallery__more:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 
 /* 수업 상세 모달 */
 .cm { padding: 0; border: 0; background: transparent; max-width: none; max-height: none; width: 100%; height: 100%; }
