@@ -217,7 +217,7 @@
     $('.cm__more-body', modal).innerHTML = rest.map(t => `<p>${t}</p>`).join('');
     $('.cm__more', modal).open = false;
     $('.cm__goals', modal).innerHTML = p.after.map((a, k) => `<li><span class="cm__n">${pad2(k + 1)}</span><div><p class="cm__a">${a}</p><p class="cm__b"><span>수업 전</span>${p.before[k] || ''}</p></div></li>`).join('');
-    modal.showModal(); $('.cm__body', modal).scrollTop = 0;
+    modal.showModal(); modal.scrollTop = 0;
   };
   // 목록 클릭 = 그 수업 자리로 이동 (hover에서 이미 전환되므로). 모달은 벽 라벨의 버튼으로만 연다
   const stepPx = () => innerHeight * 0.72;

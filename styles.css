@@ -255,9 +255,7 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .gi__btn:hover { color: rgba(255,255,255,.72); }
 .gi.is-on .gi__btn { color: #fff; }
 .gi.is-on .gi__ko { opacity: .6; transform: none; }
-/* hover 중에는 활성 표시가 hover한 행으로 옮겨간다 */
-.gallery__index.is-hovering .gi.is-on:not(.is-hover) .gi__btn { color: rgba(255,255,255,.34); }
-.gallery__index.is-hovering .gi.is-on:not(.is-hover) .gi__ko { opacity: 0; transform: translateX(-6px); }
+/* 지금 전시 중인 수업은 항상 활성, hover한 행도 함께 활성 */
 .gi.is-hover .gi__btn { color: #fff; }
 .gi.is-hover .gi__ko { opacity: .6; transform: none; }
 .gi__btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
@@ -311,11 +309,12 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .gallery__more:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 
 /* 수업 상세 모달 */
-.cm { padding: 0; border: 0; background: transparent; max-width: none; max-height: none; width: 100%; height: 100%; }
+.cm { padding: 0; border: 0; background: transparent; max-width: none; max-height: none; width: 100%; height: 100%; overflow-y: auto; overscroll-behavior: contain; }
 .cm::backdrop { background: rgba(23,23,25,.48); backdrop-filter: blur(2px); }
 .cm[open] .cm__panel { animation: cm-in .35s var(--ease-out-sine); }
-@keyframes cm-in { from { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
-.cm__panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(1000px, calc(100vw - 48px)); max-height: calc(100vh - 96px); display: flex; flex-direction: column; background: #fff; border-radius: 24px; box-shadow: 0 24px 64px rgba(0,0,0,.24); overflow: hidden; }
+@keyframes cm-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+/* 종이처럼: 위에서 48px 떨어져 시작해 아래로 쭉 이어지고, 내용이 끝나는 곳에서만 아래 여백 */
+.cm__panel { position: relative; width: min(1000px, calc(100vw - 48px)); margin: 48px auto 64px; background: #fff; border-radius: 24px; box-shadow: 0 24px 64px rgba(0,0,0,.24); }
 .cm__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; padding: 32px 40px 24px; border-bottom: 1px solid var(--line-soft); }
 .cm__no { font-size: 13px; line-height: 18px; color: var(--fg-tertiary); font-variant-numeric: tabular-nums; margin-bottom: 8px; }
 .cm__en { font-size: 32px; line-height: 40px; font-weight: 700; letter-spacing: -.0236em; }
@@ -323,7 +322,7 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .cm__close { all: unset; cursor: pointer; width: 40px; height: 40px; border-radius: var(--r-full); display: grid; place-items: center; background: var(--bg-secondary); flex: none; }
 .cm__close:hover { background: var(--surface-secondary); }
 .cm__close svg { width: 16px; height: 16px; }
-.cm__body { overflow: auto; display: grid; grid-template-columns: 248px minmax(0, 1fr); column-gap: 48px; padding: 0 40px 40px; }
+.cm__body { display: grid; grid-template-columns: 248px minmax(0, 1fr); column-gap: 48px; padding: 0 40px 56px; }
 .cm__label { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--fg-tertiary); margin-bottom: 12px; }
 /* 왼쪽: 한눈에 보는 사실 (유형 / 역량 / 전문가) */
 .cm__aside { position: sticky; top: 0; align-self: start; padding-top: 28px; display: grid; gap: 28px; }
