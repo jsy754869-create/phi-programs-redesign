@@ -225,3 +225,7 @@
   - Domain: Beautiful Interface(심미안), Visual Translation(심미안·관점 전환), Interviewing as Exploration(문제 정의·언어화), Engaging with AI(구조화·관점 전환), Typography as Foundation(심미안·구조화), Self Introduction(언어화·관점 전환)
   - Ritual: Art of Reading(언어화·관점 전환), Aesthetic Literacy(심미안·언어화), Peer Coaching(문제 정의·언어화), Readable Writing(언어화·구조화)
 - **GNB**: CTA를 평소엔 검정 버튼으로. 주요 수업 전시실이 GNB 아래에 오면 GNB 전체(배경, 메뉴, 섹션 목록, CTA)를 다크로 반전한다(0.35s).
+
+### D-017 수정 (2026-10-28 10:00): hover는 목록 표시만
+- 사용자 피드백: hover만으로 전시물과 라벨이 바뀌면 페이지가 이동한 것처럼 느껴진다.
+- **변경**: hover(키보드 포커스 포함)하면 목록의 활성 표시(흰 글자 + 국문명)만 그 행으로 옮겨간다. 전시물, 벽 라벨, 기준선은 그대로 두고, 클릭해서 그 수업 위치로 이동했을 때만 바뀐다.

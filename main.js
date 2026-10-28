@@ -151,7 +151,7 @@
   const imgs = $$('img', imgsBox), rows = $$('.gi', list);
   const L = { tags: $('.gallery__tags'), no: $('.gallery__no'), en: $('.gallery__en'), ko: $('.gallery__ko'), expert: $('.gallery__expert'), after: $('.gallery__after'), label: $('.gallery__label') };
   const modal = $('#courseModal');
-  let PROFILES = {}, gActive = -1, hoverLock = false, scrollActive = 0;
+  let PROFILES = {}, gActive = -1, scrollActive = 0;
 
   // 전시물 실제 윤곽(이미지 여백 제외, 파일에서 측정한 비율) — 윤곽 기준으로 크기를 맞추고 작도선을 붙인다
   const BOX = [[0.185,0.114,0.820,0.900], [0.173,0.155,0.827,0.849], [0.156,0.199,0.843,0.785], [0.152,0.110,0.850,0.891], [0.144,0.179,0.860,0.820], [0.117,0.113,0.880,0.888], [0.145,0.123,0.857,0.874], [0.145,0.128,0.856,0.892], [0.239,0.092,0.756,0.915], [0.116,0.118,0.889,0.894], [0.129,0.150,0.872,0.848], [0.115,0.161,0.886,0.841]];
@@ -193,11 +193,14 @@
   setCourse(0);
   addEventListener('resize', () => { imgs.forEach((_, i) => fit(i)); placeLines(gActive); placeGuide(); });
 
+  // hover/focus: 목록의 활성 표시만 옮긴다. 전시물·라벨은 클릭(이동)했을 때만 바뀐다
+  const setHover = i => { list.classList.toggle('is-hovering', i >= 0); rows.forEach((r, k) => r.classList.toggle('is-hover', k === i)); };
   rows.forEach((r, i) => {
-    r.addEventListener('mouseenter', () => { hoverLock = true; setCourse(i); });
-    r.addEventListener('focusin', () => setCourse(i));
+    r.addEventListener('mouseenter', () => setHover(i));
+    r.addEventListener('focusin', () => setHover(i));
+    r.addEventListener('focusout', () => setHover(-1));
   });
-  list.addEventListener('mouseleave', () => { hoverLock = false; setCourse(scrollActive); });
+  list.addEventListener('mouseleave', () => setHover(-1));
   const openCourse = slug => {
     const i = COURSES.findIndex(x => x[2] === slug), c = COURSES[i], p = PROFILES[slug]; if (!c || !p) return;
     $('.cm__no', modal).textContent = `No. ${pad2(i + 1)}`;
@@ -444,7 +447,7 @@
     if (gallery.classList.contains('is-scroll')) {
       const r = gallery.getBoundingClientRect();
       scrollActive = clamp(Math.round(-r.top / (vh * 0.72)), 0, COURSES.length - 1);
-      if (!hoverLock) setCourse(scrollActive);
+      setCourse(scrollActive);
     }
 
     // devices auto-open (Anduril): 항목 윗변이 화면 위에서 48% 안쪽에 들어오면 한 번

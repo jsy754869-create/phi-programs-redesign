@@ -255,6 +255,11 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .gi__btn:hover { color: rgba(255,255,255,.72); }
 .gi.is-on .gi__btn { color: #fff; }
 .gi.is-on .gi__ko { opacity: .6; transform: none; }
+/* hover 중에는 활성 표시가 hover한 행으로 옮겨간다 */
+.gallery__index.is-hovering .gi.is-on:not(.is-hover) .gi__btn { color: rgba(255,255,255,.34); }
+.gallery__index.is-hovering .gi.is-on:not(.is-hover) .gi__ko { opacity: 0; transform: translateX(-6px); }
+.gi.is-hover .gi__btn { color: #fff; }
+.gi.is-hover .gi__ko { opacity: .6; transform: none; }
 .gi__btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
 .gallery__art { position: relative; margin: 0; align-self: stretch; }
