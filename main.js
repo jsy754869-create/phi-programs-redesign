@@ -113,6 +113,28 @@
      RENDER
      ------------------------------------------------------------ */
   const ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  /* 수업 유형 + 연결 역량 (v1.4) — 원본에 데이터가 없어 수업 설명을 근거로 매핑한 가안 (D-017, Phi 확인 필요) */
+  const COMP = { aesthetic: ['심미안', 'c-aesthetic.jpg'], articulation: ['언어화', 'c-articulation.jpg'], structure: ['구조화', 'c-structure.jpg'], problem: ['문제 정의', 'c-problem.jpg'], reframing: ['관점 전환', 'c-reframing.jpg'] };
+  const TYPES = { Fundamental: '4개월, 매주', Domain: '1-2개월 단위', Ritual: '월 1회, 6시간' };
+  const META = {
+    'iterative-problem-solving': ['Fundamental', ['problem', 'structure']],
+    'beautiful-interface': ['Domain', ['aesthetic']],
+    'visual-translation': ['Domain', ['aesthetic', 'reframing']],
+    'interviewing-as-exploration': ['Domain', ['problem', 'articulation']],
+    'art-of-reading': ['Ritual', ['articulation', 'reframing']],
+    'engaging-with-ai': ['Domain', ['structure', 'reframing']],
+    'aesthetic-literacy': ['Ritual', ['aesthetic', 'articulation']],
+    'typography-as-foundation': ['Domain', ['aesthetic', 'structure']],
+    'self-introduction': ['Domain', ['articulation', 'reframing']],
+    'what-if': ['Fundamental', ['reframing', 'problem']],
+    'peer-coaching': ['Ritual', ['problem', 'articulation']],
+    'readable-writing': ['Ritual', ['articulation', 'structure']],
+  };
+  const chips = (slug, withImg) => {
+    const [t, cs] = META[slug];
+    return `<span class="chip chip--type">${t}<small>${TYPES[t]}</small></span>` +
+      cs.map(c => `<span class="chip chip--comp">${withImg ? `<img src="assets/img/${COMP[c][1]}" alt="">` : ''}${COMP[c][0]}</span>`).join('');
+  };
   /* 주요 수업 (v1.3): 목차가 곧 전시 — T—BI Showcase 18 원리
      · 12개 목차는 한 화면에 모두 보이고(전체/위치), 기준선을 지나는 하나만 크게 전시(인상)
      · 스크롤이 기준선을 움직이고, 행에 올리면 즉시 그 수업으로 전환
@@ -127,7 +149,7 @@
   const gallery = $('#gallery'), stage = $('.gallery__stage'), artBox = $('.gallery__art'), imgsBox = $('.gallery__imgs'), guide = $('.gallery__guide');
   imgsBox.innerHTML = ART.map((f, i) => `<img src="assets/gallery/${f}" alt="" decoding="async" data-i="${i}">`).join('');
   const imgs = $$('img', imgsBox), rows = $$('.gi', list);
-  const L = { no: $('.gallery__no'), en: $('.gallery__en'), ko: $('.gallery__ko'), expert: $('.gallery__expert'), after: $('.gallery__after'), label: $('.gallery__label') };
+  const L = { tags: $('.gallery__tags'), no: $('.gallery__no'), en: $('.gallery__en'), ko: $('.gallery__ko'), expert: $('.gallery__expert'), after: $('.gallery__after'), label: $('.gallery__label') };
   const modal = $('#courseModal');
   let PROFILES = {}, gActive = -1, hoverLock = false, scrollActive = 0;
 
@@ -163,7 +185,7 @@
     if (imgs[i].complete) placeLines(i); else imgs[i].addEventListener('load', () => gActive === i && placeLines(i), { once: true });
     const [en, ko, slug] = COURSES[i], p = PROFILES[slug] || {};
     L.label.classList.remove('is-in'); void L.label.offsetWidth;
-    L.no.textContent = `No. ${pad2(i + 1)}`; L.en.textContent = en; L.ko.textContent = ko;
+    L.no.textContent = `No. ${pad2(i + 1)}`; L.en.textContent = en; L.ko.textContent = ko; L.tags.innerHTML = chips(slug, false);
     L.expert.textContent = p.expert || ''; L.after.textContent = (p.after && p.after[0]) || '';
     L.label.classList.add('is-in');
   };
@@ -177,19 +199,35 @@
   });
   list.addEventListener('mouseleave', () => { hoverLock = false; setCourse(scrollActive); });
   const openCourse = slug => {
-    const c = COURSES.find(x => x[2] === slug), p = PROFILES[slug]; if (!c || !p) return;
+    const i = COURSES.findIndex(x => x[2] === slug), c = COURSES[i], p = PROFILES[slug]; if (!c || !p) return;
+    $('.cm__no', modal).textContent = `No. ${pad2(i + 1)}`;
     $('.cm__en', modal).textContent = c[0];
     $('.cm__ko', modal).textContent = c[1];
+    const [t, cs] = META[slug];
+    $('.cm__type', modal).innerHTML = `<b>${t}</b><span>${TYPES[t]}</span>`;
+    $('.cm__comps', modal).innerHTML = cs.map(k => `<li><img src="assets/img/${COMP[k][1]}" alt="">${COMP[k][0]}</li>`).join('');
     $('.cm__expert', modal).textContent = p.expert;
     $('.cm__bio', modal).textContent = p.bio;
-    $('.cm__overview', modal).innerHTML = p.overview.map(t => `<p>${t}</p>`).join('');
-    $('.cm__goals', modal).innerHTML = p.before.map((b, i) => `<li><span class="cm__n">${i + 1}</span><p class="cm__b">${b}</p><span class="cm__arrow" aria-hidden="true"></span><p class="cm__a">${p.after[i] || ''}</p></li>`).join('');
-    $('.cm__src', modal).href = `https://www.phi.design/programs/courses/${slug}`;
+    $('.cm__lead', modal).textContent = p.overview[0] || '';
+    const rest = p.overview.slice(1);
+    $('.cm__more', modal).hidden = !rest.length;
+    $('.cm__more-body', modal).innerHTML = rest.map(t => `<p>${t}</p>`).join('');
+    $('.cm__more', modal).open = false;
+    $('.cm__goals', modal).innerHTML = p.after.map((a, k) => `<li><span class="cm__n">${pad2(k + 1)}</span><div><p class="cm__a">${a}</p><p class="cm__b"><span>수업 전</span>${p.before[k] || ''}</p></div></li>`).join('');
     modal.showModal(); $('.cm__body', modal).scrollTop = 0;
   };
-  list.addEventListener('click', e => { const li = e.target.closest('.gi'); if (li) openCourse(li.dataset.slug); });
+  // 목록 클릭 = 그 수업 자리로 이동 (hover에서 이미 전환되므로). 모달은 벽 라벨의 버튼으로만 연다
+  const stepPx = () => innerHeight * 0.72;
+  const goCourse = i => {
+    if (!gallery.classList.contains('is-scroll')) { setCourse(i); return; }
+    const top = gallery.getBoundingClientRect().top + scrollY + i * stepPx();
+    jumpUntil = performance.now() + 1200;
+    scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+  };
+  list.addEventListener('click', e => { const li = e.target.closest('.gi'); if (li) goCourse(+li.dataset.i); });
   $('.gallery__more').addEventListener('click', () => openCourse(COURSES[gActive][2]));
-  artBox.addEventListener('click', () => openCourse(COURSES[gActive][2]));
+  // 스크롤 멈춤 지점: 수업마다 하나 (proximity snap)
+  gallery.insertAdjacentHTML('afterbegin', COURSES.map((_, i) => `<span class="gallery__snap" style="top:calc(${i} * 72vh)" aria-hidden="true"></span>`).join(''));
   modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('.cm__close')) modal.close(); });
 
   $('#devices').innerHTML = DEVICES.map(([n, d], i) => `
@@ -331,6 +369,7 @@
   /* ------------------------------------------------------------
      로컬 내비게이션 — 현재 위치 + 이동
      ------------------------------------------------------------ */
+  const topbar = $('.topbar');
   const navLinks = $$('[data-nav]');
   const sections = navLinks.map(a => $(a.getAttribute('href')));
   let jumpUntil = 0;
@@ -398,12 +437,13 @@
     }
     lastActive = active;
 
+    // GNB 색 반전: 어두운 전시실(주요 수업)이 GNB 아래에 있을 때
+    { const g = gallery.getBoundingClientRect(); topbar.classList.toggle('is-dark', g.top < 42 && g.bottom > 42); }
+
     // 주요 수업 갤러리: 스티키 구간 진행도 → 기준선을 지나는 수업
     if (gallery.classList.contains('is-scroll')) {
       const r = gallery.getBoundingClientRect();
-      const span = gallery.offsetHeight - vh;
-      const u = clamp(-r.top / span, 0, 0.9999);
-      scrollActive = Math.floor(u * COURSES.length);
+      scrollActive = clamp(Math.round(-r.top / (vh * 0.72)), 0, COURSES.length - 1);
       if (!hoverLock) setCourse(scrollActive);
     }
 

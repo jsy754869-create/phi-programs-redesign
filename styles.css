@@ -39,7 +39,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--navh) + 24px); }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--navh) + 24px); scroll-snap-type: y proximity; }
 body {
   margin: 0; background: var(--bg); color: var(--fg-primary);
   font-family: var(--font); font-size: 16px; line-height: 1.5; letter-spacing: .0057em;
@@ -145,6 +145,23 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .topbar__link { padding: 8px 12px; border-radius: var(--r-full); font-size: 14px; line-height: 20px; text-decoration: none; color: var(--fg-secondary); transition: background-color .15s, color .15s; }
 .topbar__link:hover { background: var(--bg-secondary); color: var(--fg-primary); }
 .topbar__cta { margin-left: 6px; height: 40px; border-radius: var(--r-full); padding: 0 18px; font-size: 14px; }
+.topbar .topbar__cta { background: var(--fg-primary); color: #fff; }
+.topbar .topbar__cta:hover { background: #000; }
+/* 주요 수업(어두운 전시실) 위에서는 GNB 전체를 반전 */
+.topbar, .topbar__brand, .topbar__link, .topbar__sep, .pageindex__pill, .pageindex__chev, .topbar .topbar__cta, .pageindex__list { transition: background-color .35s var(--ease-out-sine), color .35s var(--ease-out-sine), box-shadow .35s var(--ease-out-sine), opacity .25s var(--ease-out-sine), transform .3s var(--ease-out-sine); }
+.topbar.is-dark { background: rgba(32,32,34,.86); box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 12px 32px rgba(0,0,0,.32); }
+.topbar.is-dark .topbar__brand, .topbar.is-dark .pageindex__pill { color: #fff; }
+.topbar.is-dark .topbar__link { color: rgba(255,255,255,.68); }
+.topbar.is-dark .topbar__link:hover { background: rgba(255,255,255,.08); color: #fff; }
+.topbar.is-dark .topbar__sep { background: rgba(255,255,255,.16); }
+.topbar.is-dark .pageindex__chev { color: rgba(255,255,255,.5); }
+.topbar.is-dark .topbar__cta { background: #fff; color: var(--fg-primary); }
+.topbar.is-dark .topbar__cta:hover { background: #e9e9ec; }
+.topbar.is-dark .pageindex__list { background: #202022; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 12px 32px rgba(0,0,0,.4); }
+.topbar.is-dark .pageindex__list a { color: rgba(255,255,255,.68); }
+.topbar.is-dark .pageindex__list a:hover { background: rgba(255,255,255,.06); color: #fff; }
+.topbar.is-dark .pageindex__list a.is-active { color: #fff; }
+.topbar.is-dark .pageindex__no { color: rgba(255,255,255,.4); }
 
 .pageindex { position: relative; }
 .pageindex__pill {
@@ -210,7 +227,7 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
    ============================================================ */
 /* 주요 수업 갤러리 (v1.3) — 목차가 곧 전시. 어두운 전시실 안에서 기준선을 지나는 한 점만 조명 */
 .gallery { position: relative; background: var(--relief); color: #fff; }
-.gallery.is-scroll { height: calc(100vh + 11 * 34vh); }
+.gallery.is-scroll { height: calc(100vh + 11 * 72vh); }
 .gallery__stage {
   position: relative; height: 100vh; min-height: 720px; overflow: hidden;
   display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); column-gap: 48px;
@@ -240,7 +257,7 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .gi.is-on .gi__ko { opacity: .6; transform: none; }
 .gi__btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
-.gallery__art { position: relative; margin: 0; align-self: stretch; cursor: zoom-in; }
+.gallery__art { position: relative; margin: 0; align-self: stretch; }
 .gallery__imgs { position: absolute; inset: 0; background: var(--relief); isolation: isolate; }
 .gallery__imgs img {
   position: absolute; left: 0; top: 0; width: 100%; height: 100%; max-width: none; mix-blend-mode: lighten;
@@ -267,7 +284,13 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .gallery__no { margin: 0 0 16px; font-size: 13px; line-height: 18px; color: rgba(255,255,255,.5); font-variant-numeric: tabular-nums; }
 .gallery__en { margin: 0; font-size: 32px; line-height: 40px; font-weight: 700; letter-spacing: -.02em; }
 .gallery__ko { margin: 4px 0 0; font-size: 16px; line-height: 24px; color: rgba(255,255,255,.62); }
-.gallery__meta { margin: 32px 0 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.16); display: grid; gap: 16px; }
+.gallery__tags { margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: var(--r-full); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.chip small { font-size: 11px; font-weight: 400; opacity: .6; }
+.gallery .chip--type { background: #fff; color: var(--fg-primary); }
+.gallery .chip--comp { box-shadow: inset 0 0 0 1px rgba(255,255,255,.28); color: rgba(255,255,255,.88); }
+.gallery__snap { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; scroll-snap-align: start; scroll-margin-top: calc(-1 * (var(--navh) + 24px)); }
+.gallery__meta { margin: 24px 0 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.16); display: grid; gap: 16px; }
 .gallery__meta dt { font-size: 12px; line-height: 16px; color: rgba(255,255,255,.5); margin-bottom: 4px; }
 .gallery__meta dd { margin: 0; font-size: 15px; line-height: 24px; color: rgba(255,255,255,.88); }
 .gallery__expert { font-weight: 600; }
@@ -287,29 +310,45 @@ h1, h2, h3, p, dl, dd, figure { margin: 0; }
 .cm::backdrop { background: rgba(23,23,25,.48); backdrop-filter: blur(2px); }
 .cm[open] .cm__panel { animation: cm-in .35s var(--ease-out-sine); }
 @keyframes cm-in { from { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
-.cm__panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(880px, calc(100vw - 48px)); max-height: calc(100vh - 96px); display: flex; flex-direction: column; background: #fff; border-radius: 24px; box-shadow: 0 24px 64px rgba(0,0,0,.24); overflow: hidden; }
-.cm__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; padding: 32px 40px 20px; border-bottom: 1px solid var(--line-soft); }
-.cm__en { font-size: 28px; line-height: 38px; font-weight: 700; letter-spacing: -.0236em; }
-.cm__ko { font-size: 15px; color: var(--fg-tertiary); margin-top: 2px; }
-.cm__close { all: unset; cursor: pointer; width: 40px; height: 40px; border-radius: var(--r-full); display: grid; place-items: center; background: var(--bg-secondary); }
+.cm__panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(1000px, calc(100vw - 48px)); max-height: calc(100vh - 96px); display: flex; flex-direction: column; background: #fff; border-radius: 24px; box-shadow: 0 24px 64px rgba(0,0,0,.24); overflow: hidden; }
+.cm__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; padding: 32px 40px 24px; border-bottom: 1px solid var(--line-soft); }
+.cm__no { font-size: 13px; line-height: 18px; color: var(--fg-tertiary); font-variant-numeric: tabular-nums; margin-bottom: 8px; }
+.cm__en { font-size: 32px; line-height: 40px; font-weight: 700; letter-spacing: -.0236em; }
+.cm__ko { font-size: 16px; line-height: 24px; color: var(--fg-tertiary); margin-top: 2px; }
+.cm__close { all: unset; cursor: pointer; width: 40px; height: 40px; border-radius: var(--r-full); display: grid; place-items: center; background: var(--bg-secondary); flex: none; }
 .cm__close:hover { background: var(--surface-secondary); }
 .cm__close svg { width: 16px; height: 16px; }
-.cm__body { overflow: auto; padding: 8px 40px 40px; }
-.cm__sec { padding-top: 28px; }
+.cm__body { overflow: auto; display: grid; grid-template-columns: 248px minmax(0, 1fr); column-gap: 48px; padding: 0 40px 40px; }
 .cm__label { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--fg-tertiary); margin-bottom: 12px; }
-.cm__ba-head, .cm__goals li { display: grid; grid-template-columns: 24px minmax(0, 1fr) 28px minmax(0, 1fr); column-gap: 12px; }
-.cm__ba-head { font-size: 13px; font-weight: 600; color: var(--fg-tertiary); padding-bottom: 8px; border-bottom: 1px solid var(--line-opaque); }
-.cm__goals li { padding: 14px 0; border-bottom: 1px solid var(--line-soft); align-items: start; }
-.cm__n { font-size: 13px; line-height: 24px; color: var(--fg-tertiary); font-variant-numeric: tabular-nums; }
-.cm__b { font-size: 15px; line-height: 24px; color: var(--fg-tertiary); }
-.cm__a { font-size: 15px; line-height: 24px; color: var(--fg-primary); font-weight: 500; }
-.cm__arrow { height: 24px; position: relative; }
-.cm__arrow::before { content: ""; position: absolute; left: 4px; right: 8px; top: 12px; height: 1px; background: var(--fg-quaternary); }
-.cm__arrow::after { content: ""; position: absolute; right: 7px; top: 8.5px; width: 6px; height: 6px; border-top: 1px solid var(--fg-quaternary); border-right: 1px solid var(--fg-quaternary); transform: rotate(45deg); }
-.cm__overview p, .cm__bio { font-size: 15px; line-height: 26px; color: var(--fg-secondary); }
-.cm__overview p + p { margin-top: 10px; }
-.cm__expert { font-size: 17px; line-height: 26px; font-weight: 700; margin-bottom: 6px; }
-.cm__src { display: inline-block; margin-top: 28px; font-size: 14px; font-weight: 600; color: var(--brand); text-decoration: none; }
+/* 왼쪽: 한눈에 보는 사실 (유형 / 역량 / 전문가) */
+.cm__aside { position: sticky; top: 0; align-self: start; padding-top: 28px; display: grid; gap: 28px; }
+.cm__type { display: flex; align-items: baseline; gap: 8px; }
+.cm__type b { font-size: 17px; line-height: 24px; font-weight: 700; }
+.cm__type span { font-size: 13px; color: var(--fg-tertiary); }
+.cm__comps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cm__comps li { display: flex; align-items: center; gap: 10px; font-size: 15px; line-height: 22px; font-weight: 600; }
+.cm__comps img { width: 36px; height: 36px; border-radius: var(--r-8); object-fit: cover; background: var(--relief); }
+.cm__expert { font-size: 17px; line-height: 24px; font-weight: 700; margin-bottom: 6px; }
+.cm__bio { font-size: 13px; line-height: 20px; color: var(--fg-tertiary); display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+/* 오른쪽: 개요 한 문단 + 수업 후 변화 목록 */
+.cm__main { min-width: 0; }
+.cm__sec { padding-top: 28px; }
+.cm__sec + .cm__sec { margin-top: 12px; border-top: 1px solid var(--line-soft); }
+.cm__lead { font-size: 17px; line-height: 30px; color: var(--fg-primary); max-width: 40em; }
+.cm__more { margin-top: 12px; }
+.cm__more summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 600; color: var(--fg-secondary); }
+.cm__more summary::-webkit-details-marker { display: none; }
+.cm__more summary::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform .2s; }
+.cm__more[open] summary::after { transform: translateY(1px) rotate(-135deg); }
+.cm__more-body { margin-top: 12px; }
+.cm__more-body p { font-size: 15px; line-height: 26px; color: var(--fg-secondary); max-width: 44em; }
+.cm__goals { list-style: none; margin: 0; padding: 0; }
+.cm__goals li { display: grid; grid-template-columns: 32px minmax(0, 1fr); padding: 16px 0; border-top: 1px solid var(--line-soft); }
+.cm__goals li:first-child { border-top: 0; padding-top: 4px; }
+.cm__n { font-size: 13px; line-height: 26px; color: var(--fg-tertiary); font-variant-numeric: tabular-nums; }
+.cm__a { font-size: 16px; line-height: 26px; font-weight: 600; color: var(--fg-primary); }
+.cm__b { margin-top: 4px; font-size: 13px; line-height: 20px; color: var(--fg-tertiary); }
+.cm__b span { display: inline-block; margin-right: 8px; padding: 0 6px; border-radius: 4px; background: var(--bg-secondary); font-size: 11px; line-height: 18px; font-weight: 600; }
 
 /* ============================================================
    4-a. 태도 — 역량과 다른 그룹 신호(밝은 면 + 작도 도형)

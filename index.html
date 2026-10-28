@@ -128,6 +128,7 @@
         <p class="gallery__no"></p>
         <h3 class="gallery__en"></h3>
         <p class="gallery__ko"></p>
+        <p class="gallery__tags"></p>
         <dl class="gallery__meta">
           <div><dt>전문가</dt><dd class="gallery__expert"></dd></div>
           <div><dt>이 수업을 마치면</dt><dd class="gallery__after"></dd></div>
@@ -254,16 +255,26 @@
 <dialog class="cm" id="courseModal" aria-labelledby="cmTitle">
   <div class="cm__panel">
     <header class="cm__head">
-      <div><h2 class="cm__en" id="cmTitle"></h2><p class="cm__ko"></p></div>
+      <div>
+        <p class="cm__no"></p>
+        <h2 class="cm__en" id="cmTitle"></h2>
+        <p class="cm__ko"></p>
+      </div>
       <button class="cm__close" type="button" aria-label="닫기"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
     </header>
     <div class="cm__body">
-      <section class="cm__sec"><h3 class="cm__label">학습 목표</h3>
-        <div class="cm__ba-head" aria-hidden="true"><span></span><span>Before</span><span></span><span>After</span></div>
-        <ol class="cm__goals"></ol></section>
-      <section class="cm__sec"><h3 class="cm__label">수업 개요</h3><div class="cm__overview"></div></section>
-      <section class="cm__sec"><h3 class="cm__label">전문가</h3><p class="cm__expert"></p><p class="cm__bio"></p></section>
-      <a class="cm__src" href="#" target="_blank" rel="noopener">phi.design에서 원문 보기</a>
+      <aside class="cm__aside">
+        <div class="cm__fact"><p class="cm__label">수업 유형</p><p class="cm__type"></p></div>
+        <div class="cm__fact"><p class="cm__label">기르는 역량</p><ul class="cm__comps"></ul></div>
+        <div class="cm__fact"><p class="cm__label">전문가</p><p class="cm__expert"></p><p class="cm__bio"></p></div>
+      </aside>
+      <div class="cm__main">
+        <section class="cm__sec"><h3 class="cm__label">수업 개요</h3>
+          <p class="cm__lead"></p>
+          <details class="cm__more"><summary>개요 더 읽기</summary><div class="cm__more-body"></div></details>
+        </section>
+        <section class="cm__sec"><h3 class="cm__label">이 수업을 마치면</h3><ol class="cm__goals"></ol></section>
+      </div>
     </div>
   </div>
 </dialog>
